@@ -25,7 +25,7 @@ $ cp .env.example .env
 $ npm install
 $ node lib/server.js
 --- setup client ---
-$ cd ../websocket-react
+$ cd websocket-react
 $ cp .env.example .env
 $ npm install
 $ npm run start
