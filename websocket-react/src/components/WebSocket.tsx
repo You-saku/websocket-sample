@@ -1,40 +1,67 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
+// get random name
+const getName = () => {
+    const names = [
+        'Bob', 'John', 'Smith', 'Doe', 'Adam', 'Emily',
+        'Alice', 'Eve', 'Carol', 'David', 'Frank', 'George',
+    ];
+
+    const name = names[Math.floor(Math.random() * names.length)];
+    return name;
+}
+
+const socketUrl = process.env.REACT_APP_WS_HOST || 'ws://localhost:8080';
+const username = getName();
+
 export const WebSocketDemo = () => {
-  //Public API that will echo messages sent to it back to the client
-const [socketUrl, setSocketUrl] = useState('ws://localhost:8000');
-        
-const [messageHistory, setMessageHistory] = useState<MessageEvent[]>([]);
+    const [messageHistory, setMessageHistory] = useState<MessageEvent[]>([]);
+    const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+    const [message , setMessage] = useState<string>('');
 
-const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+    useEffect(() => {
+        if (lastMessage !== null) {
+            setMessageHistory((prev) => prev.concat(lastMessage));
+        }
+    }, [lastMessage]);
 
-useEffect(() => {
-    if (lastMessage !== null) {
-        setMessageHistory((prev) => prev.concat(lastMessage));
+    const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setMessage(e.target.value);
+    };
+
+    const handleClickSendMessage = () => {
+        sendMessage(username + ' : ' + message);
+        setMessage('');
     }
-}, [lastMessage]);
 
-const handleClickSendMessage = useCallback(() => sendMessage('Hello'), []);
+    const connectionStatus = {
+        [ReadyState.CONNECTING]: 'Connecting',
+        [ReadyState.OPEN]: 'Open',
+        [ReadyState.CLOSING]: 'Closing',
+        [ReadyState.CLOSED]: 'Closed',
+        [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
+    }[readyState];
 
-const connectionStatus = {
-    [ReadyState.CONNECTING]: 'Connecting',
-    [ReadyState.OPEN]: 'Open',
-    [ReadyState.CLOSING]: 'Closing',
-    [ReadyState.CLOSED]: 'Closed',
-    [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
-}[readyState];
-
-return (
+    return (
         <div>
-            <button
-                onClick={handleClickSendMessage}
-                disabled={readyState !== ReadyState.OPEN}
-            >
-                Click Me to send 'Hello'
-            </button>
             <p>The WebSocket is currently : {connectionStatus}</p>
-            {lastMessage ? <h2>chat start</h2> : <h2>chat stop.</h2>}
+            <form onSubmit={e => e.preventDefault()}>
+                <input  type="text" 
+                        id="message"
+                        placeholder="Enter message"
+                        value={message}
+                        onChange={handleMessageChange}
+                />
+                <button
+                    onClick={handleClickSendMessage}
+                    disabled={readyState !== ReadyState.OPEN}
+                >
+                    Send Message
+                </button>
+            </form>
+            <p>Your Name: {username}</p>
+            {lastMessage ? <h2>Chat History</h2> : <h2>Chat Stopped</h2>}
             <ul>
             {messageHistory.map((message, idx) => (
                 <p key={idx}>{message ? message.data : null}</p>
