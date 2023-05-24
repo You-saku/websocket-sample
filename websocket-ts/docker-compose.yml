@@ -1,0 +1,25 @@
+version: '3'
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:1.20.0
+    container_name: dynamodb_local
+    user: root # https://qiita.com/yuta-katayama-23/items/a8c497fe4a61f29deb34
+    volumes:
+      - dynamodb-local-data:/data # ボリュームで永続化したい
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /data # -dbPathでデータを保存する場所を指定
+    ports:
+      - 8000:8000
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:latest
+    container_name: dynamodb-admin
+    environment:
+      - DYNAMO_ENDPOINT=dynamodb-local:8000
+    ports:
+      - 8001:8001
+    depends_on:
+      - dynamodb-local
+volumes:
+  dynamodb-local-data:
+networks:
+    dynamodb-network:
+      driver: bridge
