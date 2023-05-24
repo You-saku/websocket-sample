@@ -31,7 +31,7 @@ export const WebSocketDemo = () => {
     };
 
     const handleClickSendMessage = () => {
-        sendMessage(username + ' : ' + message);
+        sendMessage(JSON.stringify({'username' : username, 'message' : message}));
         setMessage('');
     }
 
