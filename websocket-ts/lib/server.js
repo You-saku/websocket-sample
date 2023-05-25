@@ -14,8 +14,8 @@ server.on("connection", (socket) => {
     socket.on('message', function message(data) {
         clients.forEach(function each(client) {
             if (client.readyState === ws_1.default.OPEN) {
-                console.log(`${data.toString('utf8')}`);
-                client.send(`${data.toString('utf8')}`);
+                console.log(`${data}`);
+                client.send(`${data}`); // send Object to all client
             }
         });
     });
