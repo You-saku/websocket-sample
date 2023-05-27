@@ -34,13 +34,15 @@ export const Streamer = () => {
 
     return (
         <div>
-            <h2>Streamer</h2>
-            {lastMessage ? <h3>Chat History</h3> : <h3>Chat Stopped</h3>}
-            <p>The WebSocket is currently : {connectionStatus}</p>
-            <ul>
+            {/* comment out */}
+            {/* <h2>Streamer</h2> */}
+            {/* {lastMessage ? <h3>Chat History</h3> : <h3>Chat Stopped</h3>} */}
+            {/* <p>The WebSocket is currently : {connectionStatus}</p> */}
+
+            <ul style={{paddingLeft: 5}}>
             {messageHistory.map((message, idx) => (
-                <li key={idx} style={{margin: '5px', border: '1px solid black', width: '25%', listStyleType: 'none'}}>
-                    <span style={{color: message.color}}>
+                <li key={idx} style={{padding: '3px', margin: '5px', width: '25%', listStyleType: 'none', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
+                    <span>
                         {message.username}
                     </span>
                     <span>

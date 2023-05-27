@@ -92,7 +92,3 @@ export const Client = () => {
         </div>
     );
 };
-
-function stringToJson(word: string) {
-    return JSON.parse(word);
-}
