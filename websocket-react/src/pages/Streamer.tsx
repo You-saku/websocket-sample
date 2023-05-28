@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { MessageHistory } from '../types/MessageHistory';
 
@@ -24,6 +24,9 @@ export const Streamer = () => {
         [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
 
+    // ref ul element
+    const chatHistoryRef = useRef<HTMLUListElement>(null);
+
     // when start browser
     useEffect(() => {
         if (readyState === ReadyState.OPEN) {
@@ -41,6 +44,14 @@ export const Streamer = () => {
         }
     }, [lastMessage]);
 
+    // add message to chat history
+    useEffect(() => {
+        const chatHistoryElement = chatHistoryRef.current;
+        if (chatHistoryElement) {
+            chatHistoryElement.scrollTo(0, chatHistoryElement.scrollHeight);
+        }
+    }, [messageHistory]);
+
     return (
         <div>
             {/* comment out */}
@@ -48,7 +59,8 @@ export const Streamer = () => {
             {/* {lastMessage ? <h3>Chat History</h3> : <h3>Chat Stopped</h3>} */}
             {/* <p>The WebSocket is currently : {connectionStatus}</p> */}
 
-            <ul className="chat-history" style={{padding: '5px'}}>
+            <div>
+            <ul  id='chat-history' style={{padding: '5px', overflowX: 'hidden', overflowY: 'scroll', height: '400px'}} ref={chatHistoryRef}>
                 {messageHistory.map((message, idx) => (
                 <li key={idx} style={{display: 'flex', width: '20%', padding: '5px', marginBottom: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
                     <span style={{marginRight: '10px', background: '#f5f5f5'}}>{message.username}</span>
@@ -57,6 +69,7 @@ export const Streamer = () => {
                 </li>
                 ))}
             </ul>
+            </div>
         </div>
     );
 };
