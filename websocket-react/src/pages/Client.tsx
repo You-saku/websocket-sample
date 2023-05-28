@@ -65,21 +65,22 @@ export const Client = () => {
             <h2>Your Name is {username}</h2>
             <p>The WebSocket is currently : {connectionStatus}</p>
             <form onSubmit={e => e.preventDefault()}>
-                <input  type="text" 
+                {/* text form */}
+                {/* <input  type="text" 
                         id="message"
-                        placeholder="Enter message"
+                        placeholder="Add message"
                         value={message}
                         onChange={handleMessageChange}
-                />
+                /> */}
                 <select value={color} onChange={handleColorChange}>
-                    <option value="black">free</option>
+                    <option value="black">100</option>
                     <option value="blue">500</option>
                     <option value="yellow">1000</option>
                     <option value="orange">5000</option>
                     <option value="red">10000</option>
                 </select>
                 <button onClick={handleClickSendMessage} disabled={readyState !== ReadyState.OPEN}>
-                    Send Message
+                    Buy
                 </button>
             </form>
             <ul>

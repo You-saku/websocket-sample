@@ -4,6 +4,15 @@ import { MessageHistory } from '../types/MessageHistory';
 
 const socketUrl = process.env.REACT_APP_WS_HOST || 'ws://localhost:8000';
 
+// map color to price
+const ColorPriceMap = new Map<string, number>([
+    ["black", 100],
+    ["blue", 500],
+    ["yellow", 1000],
+    ["orange", 5000],
+    ["red", 10000],
+]);
+
 export const Streamer = () => {
     const [messageHistory, setMessageHistory] = useState<MessageHistory[]>([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
@@ -39,17 +48,14 @@ export const Streamer = () => {
             {/* {lastMessage ? <h3>Chat History</h3> : <h3>Chat Stopped</h3>} */}
             {/* <p>The WebSocket is currently : {connectionStatus}</p> */}
 
-            <ul style={{paddingLeft: 5}}>
-            {messageHistory.map((message, idx) => (
-                <li key={idx} style={{padding: '3px', margin: '5px', width: '25%', listStyleType: 'none', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
-                    <span>
-                        {message.username}
-                    </span>
-                    <span>
-                        : {message.message}
-                    </span>
+            <ul className="chat-history" style={{padding: '5px'}}>
+                {messageHistory.map((message, idx) => (
+                <li key={idx} style={{display: 'flex', width: '20%', padding: '5px', marginBottom: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
+                    <span style={{marginRight: '10px', background: '#f5f5f5'}}>{message.username}</span>
+                    {/* <span style={{color: `${message.color}`}}>{message.message}</span> */}
+                    <span style={{marginLeft: 'auto', textAlign: 'right'}}>{ColorPriceMap.get(message.color)}¥</span>
                 </li>
-            ))}
+                ))}
             </ul>
         </div>
     );
