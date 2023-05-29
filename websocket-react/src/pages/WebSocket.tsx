@@ -19,7 +19,7 @@ const username = getName();
 export const WebSocketDemo = () => {
     const [messageHistory, setMessageHistory] = useState<MessageHistory[]>([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-    const [message , setMessage] = useState<string>('');
+    const [text , setText] = useState<string>('');
     const [color, setColor] = useState<string>('black');
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
@@ -39,7 +39,7 @@ export const WebSocketDemo = () => {
 
     // when change message
     const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMessage(e.target.value);
+        setText(e.target.value);
     };
 
     // when change color
@@ -52,10 +52,10 @@ export const WebSocketDemo = () => {
         // send json to server via websocket
         sendMessage(JSON.stringify({
             'username' : username,
-            'message' : message,
+            'text' : text,
             'color' : color
         }));
-        setMessage('');
+        setText('');
     }
 
     return (
@@ -65,7 +65,7 @@ export const WebSocketDemo = () => {
                 <input  type="text" 
                         id="message"
                         placeholder="Enter message"
-                        value={message}
+                        value={text}
                         onChange={handleMessageChange}
                 />
                 <select value={color} onChange={handleColorChange}>
@@ -84,7 +84,7 @@ export const WebSocketDemo = () => {
             <ul>
             {messageHistory.map((message, idx) => (
                 <p key={idx}>
-                    <span style={{color: message.color}}>{message.username} : {message.message}</span>
+                    <span style={{color: message.color}}>{message.username} : {message.text}</span>
                 </p>
             ))}
             </ul>

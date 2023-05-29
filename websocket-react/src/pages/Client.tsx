@@ -19,7 +19,7 @@ const username = getName();
 export const Client = () => {
     const [messageHistory, setMessageHistory] = useState<MessageHistory[]>([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
-    const [message , setMessage] = useState<string>('');
+    const [text , setText] = useState<string>('');
     const [color, setColor] = useState<string>('black');
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
@@ -40,7 +40,7 @@ export const Client = () => {
 
     // when change message
     const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMessage(e.target.value);
+        setText(e.target.value);
     };
 
     // when change color
@@ -54,10 +54,10 @@ export const Client = () => {
         sendMessage(JSON.stringify({
             'client' : true,
             'username' : username,
-            'message' : message,
+            'text' : text,
             'color' : color
         }));
-        setMessage('');
+        setText('');
     }
 
     return (
@@ -66,17 +66,15 @@ export const Client = () => {
             <p>The WebSocket is currently : {connectionStatus}</p>
             <form onSubmit={e => e.preventDefault()}>
                 {/* text form */}
-                {/* <input  type="text" 
+                <input  type="text" 
                         id="message"
                         placeholder="Add message"
-                        value={message}
+                        value={text}
                         onChange={handleMessageChange}
-                /> */}
+                />
                 <select value={color} onChange={handleColorChange}>
                     <option value="black">100</option>
-                    <option value="blue">500</option>
-                    <option value="yellow">1000</option>
-                    <option value="orange">5000</option>
+                    <option value="orange">1000</option>
                     <option value="red">10000</option>
                 </select>
                 <button onClick={handleClickSendMessage} disabled={readyState !== ReadyState.OPEN}>
@@ -86,7 +84,7 @@ export const Client = () => {
             <ul>
             {messageHistory.map((message, idx) => (
                 <p key={idx}>
-                    <span style={{color: message.color}}>{message.username} : {message.message}</span>
+                    <span style={{color: message.color}}>{message.username} : {message.text}</span>
                 </p>
             ))}
             </ul>

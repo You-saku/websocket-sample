@@ -7,10 +7,15 @@ const socketUrl = process.env.REACT_APP_WS_HOST || 'ws://localhost:8000';
 // map color to price
 const ColorPriceMap = new Map<string, number>([
     ["black", 100],
-    ["blue", 500],
-    ["yellow", 1000],
-    ["orange", 5000],
+    ["orange", 1000],
     ["red", 10000],
+]);
+
+// map color to grade
+const ColorGradeMap = new Map<string, string>([
+    ["black", '松'],
+    ["orange", '竹'],
+    ["red", '梅'],
 ]);
 
 export const Streamer = () => {
@@ -40,7 +45,7 @@ export const Streamer = () => {
     useEffect(() => {
         if (lastMessage !== null) {
             const lastMessageJson = stringToJson(lastMessage.data); // convert to JSON (type MessageHistory)
-            setMessageHistory((prev) => prev.concat(lastMessageJson));
+            setMessageHistory([lastMessageJson, ...messageHistory]);
         }
     }, [lastMessage]);
 
@@ -48,28 +53,29 @@ export const Streamer = () => {
     useEffect(() => {
         const chatHistoryElement = chatHistoryRef.current;
         if (chatHistoryElement) {
-            chatHistoryElement.scrollTo(0, chatHistoryElement.scrollHeight);
+            //chatHistoryElement.scrollTo(0, chatHistoryElement.scrollHeight);
+            chatHistoryElement.scrollTo(0, 0);
         }
     }, [messageHistory]);
 
     return (
         <div>
-            {/* comment out */}
-            {/* <h2>Streamer</h2> */}
-            {/* {lastMessage ? <h3>Chat History</h3> : <h3>Chat Stopped</h3>} */}
-            {/* <p>The WebSocket is currently : {connectionStatus}</p> */}
-
-            <div>
             <ul  id='chat-history' style={{padding: '5px', overflowX: 'hidden', overflowY: 'scroll', height: '400px'}} ref={chatHistoryRef}>
                 {messageHistory.map((message, idx) => (
-                <li key={idx} style={{display: 'flex', width: '20%', padding: '5px', marginBottom: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
-                    <span style={{marginRight: '10px', background: '#f5f5f5'}}>{message.username}</span>
-                    {/* <span style={{color: `${message.color}`}}>{message.message}</span> */}
-                    <span style={{marginLeft: 'auto', textAlign: 'right'}}>{ColorPriceMap.get(message.color)}¥</span>
+                <li key={idx} style={{ width: '20%', marginBottom: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
+                    <div>
+                        <p style={{padding: '0px', margin: '0px', display: 'grid', gridTemplateColumns: '2fr 1fr', color: 'white', background: `${message.color}`}}>
+                            <span>{message.username}さん</span>
+                            <span>{ColorGradeMap.get(message.color)}コース</span>
+                        </p>
+                        <p style={{padding: '0px', margin: '10px', display: 'grid', gridTemplateColumns: '2fr 1fr'}}> 
+                            <span> {message.text === '' ? 'ご支援' : message.text}</span>
+                            <span>¥{ColorPriceMap.get(message.color)}</span>
+                        </p>
+                    </div>
                 </li>
                 ))}
             </ul>
-            </div>
         </div>
     );
 };

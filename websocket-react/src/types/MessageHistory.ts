@@ -1,6 +1,6 @@
 // type for message history
 export type MessageHistory = {
     username: string;
-    message: string;
+    text: string;
     color: string;
 }
