@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Routing } from './pages/Routing';
+import { Routing } from './components/Routing';
 import { Home } from './pages/Home';
 import { Client } from './pages/Client';
 import { Streamer }  from './pages/Streamer';
