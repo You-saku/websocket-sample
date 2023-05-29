@@ -13,9 +13,9 @@ const ColorPriceMap = new Map<string, number>([
 
 // map color to grade
 const ColorGradeMap = new Map<string, string>([
-    ["black", '松'],
+    ["black", '梅'],
     ["orange", '竹'],
-    ["red", '梅'],
+    ["red", '松'],
 ]);
 
 export const Streamer = () => {
