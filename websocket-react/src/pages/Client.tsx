@@ -20,7 +20,7 @@ export const Client = () => {
     const [messageHistory, setMessageHistory] = useState<MessageHistory[]>([]);
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
     const [text , setText] = useState<string>('');
-    const [color, setColor] = useState<string>('black');
+    const [color, setColor] = useState<string>('#FFB6C1');
     const connectionStatus = {
         [ReadyState.CONNECTING]: 'Connecting',
         [ReadyState.OPEN]: 'Open',
@@ -73,9 +73,9 @@ export const Client = () => {
                         onChange={handleMessageChange}
                 />
                 <select value={color} onChange={handleColorChange}>
-                    <option value="black">100</option>
-                    <option value="orange">1000</option>
-                    <option value="red">10000</option>
+                    <option value="#FFB6C1">梅</option>
+                    <option value="#ADFF2F">竹</option>
+                    <option value="#00FF00">松</option>
                 </select>
                 <button onClick={handleClickSendMessage} disabled={readyState !== ReadyState.OPEN}>
                     Buy

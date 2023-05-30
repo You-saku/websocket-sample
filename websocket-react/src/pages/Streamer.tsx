@@ -1,21 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { MessageHistory } from '../types/MessageHistory';
+import '../css/Streamer.css';
 
 const socketUrl = process.env.REACT_APP_WS_HOST || 'ws://localhost:8000';
 
 // map color to price
 const ColorPriceMap = new Map<string, number>([
-    ["black", 100],
-    ["orange", 1000],
-    ["red", 10000],
+    ["#FFB6C1", 100],
+    ["#ADFF2F", 1000],
+    ["#00FF00", 10000],
 ]);
 
 // map color to grade
 const ColorGradeMap = new Map<string, string>([
-    ["black", '梅'],
-    ["orange", '竹'],
-    ["red", '松'],
+    ["#FFB6C1", '梅'],
+    ["#ADFF2F", '竹'],
+    ["#00FF00", '松'],
 ]);
 
 export const Streamer = () => {
@@ -45,7 +46,7 @@ export const Streamer = () => {
     useEffect(() => {
         if (lastMessage !== null) {
             const lastMessageJson = stringToJson(lastMessage.data); // convert to JSON (type MessageHistory)
-            setMessageHistory([lastMessageJson, ...messageHistory]);
+            setMessageHistory((prev) => prev.concat(lastMessageJson));
         }
     }, [lastMessage]);
 
@@ -54,17 +55,17 @@ export const Streamer = () => {
         const chatHistoryElement = chatHistoryRef.current;
         if (chatHistoryElement) {
             //chatHistoryElement.scrollTo(0, chatHistoryElement.scrollHeight);
-            chatHistoryElement.scrollTo(0, 0);
+            chatHistoryElement.scrollTo(0, chatHistoryElement.scrollHeight);
         }
     }, [messageHistory]);
 
     return (
-        <div>
-            <ul  id='chat-history' style={{padding: '5px', overflowX: 'hidden', overflowY: 'scroll', height: '400px'}} ref={chatHistoryRef}>
+        <div style={{paddingLeft: '20px'}}>
+            <ul id='chat-history' style={{listStyle: 'none', padding: '5px', overflowX: 'hidden', overflowY: 'scroll', height: '550px'}} ref={chatHistoryRef}>
                 {messageHistory.map((message, idx) => (
-                <li key={idx} style={{ width: '20%', marginBottom: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
+                <li id='chat' key={idx} style={{width: '17%', margin: '5px', border: `3px solid ${message.color}`, borderRadius: '5px'}}>
                     <div>
-                        <p style={{padding: '0px', margin: '0px', display: 'grid', gridTemplateColumns: '2fr 1fr', color: 'white', background: `${message.color}`}}>
+                        <p style={{padding: '0px', margin: '0px', display: 'grid', gridTemplateColumns: '2fr 1fr', color: 'black', background: `${message.color}`}}>
                             <span>{message.username}さん</span>
                             <span>{ColorGradeMap.get(message.color)}コース</span>
                         </p>

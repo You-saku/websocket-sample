@@ -1,0 +1,17 @@
+
+@keyframes fadeUpAnime{
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY();
+    }
+}
+
+#chat {
+    animation-name: fadeUpAnime;
+    animation-duration: 1.3s;
+}  
