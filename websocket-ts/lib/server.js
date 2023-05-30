@@ -13,25 +13,23 @@ server.on("connection", (socket) => {
     console.log("WebSocket connected");
     socket.on('message', function message(data) {
         const message = stringToJson(data.toString());
-        console.log(message);
         // first connection
         if (message.username === undefined) {
             console.log("Connection");
             if (message.client) {
                 clients.add(socket);
-                console.log("Client");
             }
             else {
                 streamers.add(socket);
-                console.log("Streamer");
             }
+            console.log(`Client : ${clients.size}, Streamer : ${streamers.size}`);
             return;
         }
         // receive message
         if (message.client) {
             streamers.forEach(function each(streamer) {
                 if (streamer.readyState === ws_1.default.OPEN) {
-                    console.log(`${data}`);
+                    console.log(`${data}`); // for debug
                     streamer.send(`${data}`); // send Object to all client
                 }
             });
@@ -40,7 +38,9 @@ server.on("connection", (socket) => {
     });
     socket.on("close", () => {
         clients.delete(socket);
+        streamers.delete(socket);
         console.log("WebSocket closed");
+        console.log(`Client : ${clients.size}, Streamer : ${streamers.size}`);
     });
 });
 function stringToJson(word) {

@@ -14,19 +14,16 @@ server.on("connection", (socket: WebSocket) => {
 
     socket.on('message', function message(data: Buffer) {
         const message: Message = stringToJson(data.toString());
-        console.log(message); // for debug
 
         // first connection
         if ( message.username === undefined ) {
             console.log("Connection");
             if (message.client) {
                 clients.add(socket);
-                console.log("Client");
             } else {
                 streamers.add(socket);
-                console.log("Streamer");
             }
-
+            console.log(`Client : ${clients.size}, Streamer : ${streamers.size}`);
             return;
         }
 
@@ -45,7 +42,10 @@ server.on("connection", (socket: WebSocket) => {
 
     socket.on("close", () => {
         clients.delete(socket);
+        streamers.delete(socket);
+
         console.log("WebSocket closed");
+        console.log(`Client : ${clients.size}, Streamer : ${streamers.size}`);
     });
 });
 
