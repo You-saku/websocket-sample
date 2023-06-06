@@ -28,7 +28,6 @@ export const Streamer = () => {
 
     const [isShowLatestMessage, setIsShowLatestMessage] = useState<boolean>(false); // judge popup message
     const [messageHistory, setMessageHistory] = useState<MessageHistory[]>([]); // message history
-    //const timeoutRef = useRef<NodeJS.Timeout | null>(null); // timeout
     const [timer, setTimer] = useState<NodeJS.Timeout|null>(null);
 
     const { sendMessage, lastMessage, readyState } = useWebSocket(socketUrl);
