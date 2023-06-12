@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "../websocket-ts/src/types/Message.ts"  ]
 }
